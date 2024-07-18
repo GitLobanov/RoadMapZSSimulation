@@ -14,7 +14,7 @@ public class Simulation {
         while (true) {
             startSimulation(gameMap);
             try {
-                sleep(7000);
+                sleep(1000);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
@@ -37,14 +37,13 @@ public class Simulation {
 
     private static void startSimulation(GameMap gameMap) {
 
-        for (int i = 1; i <= 9; i++){
+        MapClass mapClass = gameMap.getMapClass();
 
-            for (int j = 0; j < 9; j++) {
-                try {
-                    Predator creature = (Predator) gameMap.getMap().get(String.valueOf(j).concat(String.valueOf(i)));
-                    creature.makeMove(gameMap.getMap());
-                } catch (Exception ignored) {
-                }
+        for (Entity entity : mapClass.getEntities()){
+            try {
+                Predator predator = (Predator) entity;
+                predator.makeMove(mapClass);
+            } catch (Exception ignored) {
             }
         }
 

@@ -7,7 +7,7 @@ public class Herbivore extends Creature {
     }
 
     @Override
-    public void makeMove(HashMap<String,Entity> map) {
+    public void makeMove(MapClass mapClass) {
 
     }
 }

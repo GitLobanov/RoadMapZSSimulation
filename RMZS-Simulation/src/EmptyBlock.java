@@ -4,4 +4,8 @@ public class EmptyBlock extends Entity{
         icon = "  ";
     }
 
+    private void makeEntity (){
+
+    }
+
 }

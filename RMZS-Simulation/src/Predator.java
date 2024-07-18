@@ -1,7 +1,3 @@
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-
 public class Predator extends Creature {
 
     private int powerOfAttack = 1;
@@ -15,35 +11,60 @@ public class Predator extends Creature {
     }
 
     @Override
-    public void makeMove(HashMap<String, Entity> map) {
+    public void makeMove(MapClass mapClass) {
 
-        int column = Integer.parseInt(getPlace().split("")[0]);
-        int row = Integer.parseInt(getPlace().split("")[1]);
+        boolean attack = attackHerbivore(mapClass);
+        if (!attack) makeStep(mapClass);
 
-        int nextColumn = column + getSpeedInCell();
-        int nextRow = row + getSpeedInCell();
-
-        checkPlace(nextColumn, row, map);
-        checkPlace(column, nextRow, map);
-        checkPlace(nextColumn, nextRow, map);
-
-        nextColumn = column - getSpeedInCell();
-        nextRow = row - getSpeedInCell();
-
-        checkPlace(nextColumn, row, map);
-        checkPlace(column, nextRow, map);
-        checkPlace(nextColumn, nextRow, map);
     }
 
-    private void checkPlace(int next, int current, HashMap<String, Entity> map) {
-        try {
-            String key = next + "" + current;
-            Herbivore herbivore = (Herbivore) map.get(key);
-            hitCreature(herbivore);
-            if (herbivore.getHp() < 1) {
-                map.replace(key, new EmptyBlock());
-            }
-        } catch (Exception ignored) {
+    private boolean makeStep(MapClass mapClass) {
+
+        for (Cell nearCell : getListNearCells()) {
+                try {
+                    EmptyBlock emptyBlock = (EmptyBlock) mapClass.getEntity(nearCell);
+                    emptyBlock.setPlaceInCell(getPlaceInCell());
+                    mapClass.update(getPlaceInCell(), emptyBlock);
+
+                    mapClass.update(nearCell, this);
+                    setPlaceInCell(nearCell);
+                    return true;
+                } catch (Exception ignored) {
+                }
         }
+
+        return false;
+
+    }
+
+    private boolean attackHerbivore(MapClass mapClass) {
+
+
+        for (Entity entity : mapClass.getEntities()) {
+
+            for (Cell cell : getListNearCells()) {
+                if (entity.getPlaceInCell().equals(cell)) {
+                    try {
+                        Herbivore herbivore = (Herbivore) entity;
+                        hitCreature(herbivore);
+
+                        if (herbivore.getHp() <= 0) {
+                            EmptyBlock emptyBlock = new EmptyBlock();
+                            emptyBlock.setPlaceInCell(cell);
+                            mapClass.add(cell, emptyBlock);
+                        }
+
+                        return true;
+                    } catch (Exception ignored) {
+
+                    }
+
+                }
+            }
+
+        }
+
+        return false;
+
     }
 }

@@ -1,11 +1,9 @@
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
 public class GameMap {
 
-    private HashMap<String,Entity> map = new HashMap<>();
+    private MapClass mapClass = new MapClass(9,9);
 
     // |1|2|3|4|
     // |2| | | |
@@ -16,10 +14,10 @@ public class GameMap {
 
     public void autoFill () {
 
-        for (int i = 1; i <= 9; i++){
-            for (int j = 0; j < 9; j++) {
-                String place = String.valueOf(j).concat(String.valueOf(i));
-                map.put(place, getRandomFill(place));
+        for (int i = 1; i <= mapClass.getCountRows(); i++){
+            for (int j = 1; j <= mapClass.getCountColumns(); j++) {
+                Cell cell = new Cell(j,i);
+                mapClass.add(cell, getRandomFill(cell));
             }
         }
     }
@@ -29,12 +27,9 @@ public class GameMap {
 
         System.out.println("_|1|2|3|4|5|6|7|8|9");
 
-        for (int i = 1; i <= 9; i++){
-            System.out.print(i);
-            for (int j = 0; j < 9; j++) {
-                System.out.print(map.get(String.valueOf(j).concat(String.valueOf(i))).icon);
-            }
-            System.out.println();
+        for (Entity entity : mapClass.getEntities()) {
+            System.out.print(entity.icon);
+            if (entity.getPlaceInCell().getColumn() + 1 > 9) System.out.println();
         }
 
     }
@@ -44,17 +39,17 @@ public class GameMap {
         System.out.flush();
     }
 
-    private Entity getRandomFill (String place) {
+    private Entity getRandomFill (Cell cell) {
         Random r = new Random();
         List<Entity> randomEntity =
                 List.of(new EmptyBlock(), new Predator(), new Grass(), new Herbivore(), new Rock(), new Tree());
         Entity entity = randomEntity.get(r.nextInt(0,randomEntity.size()-1));
-        entity.setPlace(place);
+        entity.setPlaceInCell(cell);
 
         return entity;
     }
 
-    public HashMap<String, Entity> getMap() {
-        return map;
+    public MapClass getMapClass() {
+        return mapClass;
     }
 }

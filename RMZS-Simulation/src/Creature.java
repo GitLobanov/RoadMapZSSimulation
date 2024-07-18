@@ -17,5 +17,5 @@ public abstract class Creature extends Entity {
         this.hp = hp;
     }
 
-    public abstract void makeMove(HashMap<String, Entity> map);
+    public abstract void makeMove(MapClass map);
 }
