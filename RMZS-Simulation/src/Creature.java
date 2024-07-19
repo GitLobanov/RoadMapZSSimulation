@@ -18,4 +18,23 @@ public abstract class Creature extends Entity {
     }
 
     public abstract void makeMove(MapClass map);
+
+    public boolean makeStep(MapClass mapClass) {
+
+        for (Cell nearCell : getListNearCells()) {
+            try {
+                EmptyBlock emptyBlock = (EmptyBlock) mapClass.getEntity(nearCell);
+                emptyBlock.setPlaceInCell(getPlaceInCell());
+                mapClass.update(getPlaceInCell(), emptyBlock);
+
+                mapClass.update(nearCell, this);
+                setPlaceInCell(nearCell);
+                return true;
+            } catch (Exception ignored) {
+            }
+        }
+
+        return false;
+
+    }
 }

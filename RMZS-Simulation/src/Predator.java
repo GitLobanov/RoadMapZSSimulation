@@ -18,25 +18,6 @@ public class Predator extends Creature {
 
     }
 
-    private boolean makeStep(MapClass mapClass) {
-
-        for (Cell nearCell : getListNearCells()) {
-                try {
-                    EmptyBlock emptyBlock = (EmptyBlock) mapClass.getEntity(nearCell);
-                    emptyBlock.setPlaceInCell(getPlaceInCell());
-                    mapClass.update(getPlaceInCell(), emptyBlock);
-
-                    mapClass.update(nearCell, this);
-                    setPlaceInCell(nearCell);
-                    return true;
-                } catch (Exception ignored) {
-                }
-        }
-
-        return false;
-
-    }
-
     private boolean attackHerbivore(MapClass mapClass) {
 
 

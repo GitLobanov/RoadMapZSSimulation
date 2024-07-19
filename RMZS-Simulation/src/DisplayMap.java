@@ -1,14 +1,15 @@
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class GameMap {
+public class DisplayMap {
 
     private MapClass mapClass = new MapClass(9,9);
 
     // |1|2|3|4|
     // |2| | | |
 
-    public GameMap () {
+    public DisplayMap() {
         autoFill();
     }
 
@@ -40,9 +41,41 @@ public class GameMap {
     }
 
     private Entity getRandomFill (Cell cell) {
+        int countEmpty = 2;
+        int countPredator = 1;
+        int countHerbivore = 4;
+        int countGrass = 5;
+        int countRock = 1;
+        int countTree = 1;
+
         Random r = new Random();
         List<Entity> randomEntity =
-                List.of(new EmptyBlock(), new Predator(), new Grass(), new Herbivore(), new Rock(), new Tree());
+                new ArrayList<>();
+
+        for (int i = 0; i < countEmpty; i++) {
+            randomEntity.add(new EmptyBlock());
+        }
+
+        for (int i = 0; i < countPredator; i++) {
+            randomEntity.add(new Predator());
+        }
+
+        for (int i = 0; i < countHerbivore; i++) {
+            randomEntity.add(new Herbivore());
+        }
+
+        for (int i = 0; i < countGrass; i++) {
+            randomEntity.add(new Grass());
+        }
+
+        for (int i = 0; i < countRock; i++) {
+            randomEntity.add(new Rock());
+        }
+
+        for (int i = 0; i < countTree; i++) {
+            randomEntity.add(new Tree());
+        }
+
         Entity entity = randomEntity.get(r.nextInt(0,randomEntity.size()-1));
         entity.setPlaceInCell(cell);
 
